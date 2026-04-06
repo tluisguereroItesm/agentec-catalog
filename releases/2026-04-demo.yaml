@@ -1,0 +1,14 @@
+release: 2026-04-demo
+tools:
+  - name: web-login-playwright
+    version: 0.1.0
+    source: agentec-tools/tools/web-login-playwright
+    enabled: true
+skills:
+  - name: web-login-monitor
+    version: 0.1.0
+    source: agentec-skills/skills/web-login-monitor
+    enabled: true
+profiles:
+  - name: monitorizacion-web
+    enabled: true

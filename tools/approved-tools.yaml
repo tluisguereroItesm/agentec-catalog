@@ -1,0 +1,5 @@
+approved_tools:
+  - name: web-login-playwright
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved

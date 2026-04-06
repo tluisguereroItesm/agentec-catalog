@@ -1,0 +1,6 @@
+name: monitorizacion-web
+description: perfil para pruebas de acceso web y validacion de login
+tools:
+  - web-login-playwright
+skills:
+  - web-login-monitor
