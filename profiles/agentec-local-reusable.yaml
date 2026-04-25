@@ -1,0 +1,12 @@
+name: agentec-local-reusable
+description: perfil reusable local con web login y Microsoft Graph para correo y archivos
+tools:
+  - web-login-playwright
+  - web-login-playwright-py
+  - graph-mail
+  - graph-files
+skills:
+  - web-login-monitor
+  - web-login-monitor-py
+  - graph-mail
+  - graph-files

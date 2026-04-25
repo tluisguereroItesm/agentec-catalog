@@ -1,0 +1,40 @@
+release: 2026-04-demo
+tools:
+  - name: web-login-playwright
+    version: 0.1.0
+    source: agentec-tools/tools/web-login-playwright
+    enabled: true
+  - name: web-login-playwright-py
+    version: 0.1.0
+    source: agentec-tools/tools/web-login-playwright-py
+    enabled: true
+  - name: graph-mail
+    version: 0.1.0
+    source: agentec-tools/tools/graph-mail
+    enabled: true
+  - name: graph-files
+    version: 0.1.0
+    source: agentec-tools/tools/graph-files
+    enabled: true
+skills:
+  - name: web-login-monitor
+    version: 0.1.0
+    source: agentec-skills/skills/web-login-monitor
+    enabled: true
+  - name: web-login-monitor-py
+    version: 0.1.0
+    source: agentec-skills/skills/web-login-monitor-py
+    enabled: true
+  - name: graph-mail
+    version: 0.1.0
+    source: agentec-skills/skills/graph-mail
+    enabled: true
+  - name: graph-files
+    version: 0.1.0
+    source: agentec-skills/skills/graph-files
+    enabled: true
+profiles:
+  - name: monitorizacion-web
+    enabled: true
+  - name: agentec-local-reusable
+    enabled: true

@@ -1,0 +1,61 @@
+approved_tools:
+  - name: web-login-playwright
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: web-login-playwright-py
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: graph-mail
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: graph-files
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: web-fetch-download
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: doc-reader
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: graph-users
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: graph-sharepoint-search
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: graph-approvals
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: graph-calendar
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: graph-files-write
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: graph-teams
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: graph-flows
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: graph-powerbi
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: cleanup
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved

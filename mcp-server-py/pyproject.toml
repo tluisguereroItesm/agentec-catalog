@@ -1,0 +1,23 @@
+[project]
+name = "agentec-mcp-server-py"
+version = "0.1.0"
+description = "MCP server Python-first for AgenTEC catalog"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.116.0",
+  "uvicorn[standard]>=0.35.0",
+  "pydantic>=2.11.0",
+  "PyYAML>=6.0.2",
+  "playwright>=1.52.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.4.0",
+  "httpx>=0.28.0",
+]
+
+[tool.uvicorn]
+host = "0.0.0.0"
+port = 3100

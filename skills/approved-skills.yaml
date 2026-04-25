@@ -1,0 +1,82 @@
+approved_skills:
+  - name: web-login-monitor
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: web-login-monitor-py
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: graph-mail
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: graph-files
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+  - name: web-document-fetch
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+    skillFile: skills/web-document-fetch/SKILL.md
+  - name: doc-summarize
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+    skillFile: skills/doc-summarize/SKILL.md
+  - name: common-validacion
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+    skillFile: skills/common/validacion/SKILL.md
+  - name: common-notificaciones
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+    skillFile: skills/common/notificaciones/SKILL.md
+  - name: graph-users
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+    skillFile: skills/graph-users/SKILL.md
+  - name: graph-sharepoint-search
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+    skillFile: skills/graph-sharepoint-search/SKILL.md
+  - name: graph-approvals
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+    skillFile: skills/graph-approvals/SKILL.md
+  - name: graph-calendar
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+    skillFile: skills/graph-calendar/SKILL.md
+  - name: graph-files-write
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+    skillFile: skills/graph-files-write/SKILL.md
+  - name: graph-teams
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+    skillFile: skills/graph-teams/SKILL.md
+  - name: graph-flows
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+    skillFile: skills/graph-flows/SKILL.md
+  - name: graph-powerbi
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+    skillFile: skills/graph-powerbi/SKILL.md
+  - name: cleanup
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+    skillFile: skills/cleanup/SKILL.md

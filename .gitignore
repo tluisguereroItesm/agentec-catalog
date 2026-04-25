@@ -1,0 +1,31 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE settings
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Temporary/cache files
+*.tmp
+*.temp
+*.swp
+*~
+
+# Build/output folders
+dist/
+build/
+coverage/
+
+# Python cache (safe default)
+__pycache__/
+*.py[cod]
