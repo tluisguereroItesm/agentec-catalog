@@ -10,6 +10,18 @@ import { loadRegistry, ToolHandler } from "./registry";
 
 const PORT = parseInt(process.env.MCP_PORT ?? "3000", 10);
 const MCP_AUTH_TOKEN = (process.env.AGENTEC_MCP_AUTH_TOKEN ?? "").trim();
+const GRAPH_TOOL_NAMES = new Set<string>([
+  "graph_mail",
+  "graph_files",
+  "graph_files_write",
+  "graph_calendar",
+  "graph_teams",
+  "graph_users",
+  "graph_sharepoint_search",
+  "graph_approvals",
+  "graph_flows",
+  "graph_powerbi",
+]);
 
 /** Timing-safe token comparison to prevent timing attacks */
 function isAuthorizedRequest(req: http.IncomingMessage) {
@@ -23,6 +35,58 @@ function isAuthorizedRequest(req: http.IncomingMessage) {
   } catch {
     return false;
   }
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function sanitizeUserKey(value: string): string {
+  return value.replace(/[^a-zA-Z0-9._:-]/g, "_").slice(0, 120);
+}
+
+function getSessionUserKey(req: http.IncomingMessage): string {
+  const headerCandidates = [
+    req.headers["mcp-session-id"],
+    req.headers["x-openclaw-session-id"],
+    req.headers["x-session-id"],
+    req.headers["x-openclaw-connection-id"],
+  ];
+
+  for (const candidate of headerCandidates) {
+    const val = Array.isArray(candidate) ? candidate[0] : candidate;
+    if (typeof val === "string" && val.trim()) {
+      return sanitizeUserKey(val.trim());
+    }
+  }
+
+  return "owner";
+}
+
+function injectGraphUserOnBody(req: http.IncomingMessage, parsedBody: unknown): unknown {
+  if (Array.isArray(parsedBody)) {
+    return parsedBody.map((item) => injectGraphUserOnBody(req, item));
+  }
+
+  if (!isRecord(parsedBody)) return parsedBody;
+
+  const method = typeof parsedBody.method === "string" ? parsedBody.method : "";
+  if (method !== "tools/call") return parsedBody;
+
+  if (!isRecord(parsedBody.params)) return parsedBody;
+  const params = parsedBody.params;
+  const toolName = typeof params.name === "string" ? params.name : "";
+  if (!GRAPH_TOOL_NAMES.has(toolName)) return parsedBody;
+
+  const args = isRecord(params.arguments) ? params.arguments : {};
+  const existingUser = typeof args.user === "string" ? args.user.trim() : "";
+  if (!existingUser) {
+    args.user = getSessionUserKey(req);
+    params.arguments = args;
+    parsedBody.params = params;
+  }
+
+  return parsedBody;
 }
 
 function createMcpServer(tools: ToolHandler[]) {
@@ -119,7 +183,8 @@ async function main() {
         if (res.writableEnded) return;
         try {
           const parsedBody = body ? JSON.parse(body) : undefined;
-          await transport.handleRequest(req, res, parsedBody);
+          const patchedBody = injectGraphUserOnBody(req, parsedBody);
+          await transport.handleRequest(req, res, patchedBody);
         } catch (err) {
           const message = err instanceof Error ? err.message : String(err);
           console.error("[agentec-mcp-server] /mcp request failed:", message);
