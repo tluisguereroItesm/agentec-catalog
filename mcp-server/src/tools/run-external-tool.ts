@@ -16,8 +16,8 @@ const GRAPH_TOOL_NAMES = new Set<string>([
   "graph_approvals",
   "graph_flows",
   "graph_powerbi",
-  // curp_downloader uses Graph only for email/onedrive delivery — participates in the auth flow
-  "curp_downloader",
+  // curp_downloader handles Graph auth internally (only when delivery=email/onedrive).
+  // It must NOT be in this set — forcing auth on every call breaks delivery=artifact.
 ]);
 
 const AUTH_ACTIONS = new Set<string>(["auth-login", "auth-poll"]);
