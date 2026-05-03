@@ -16,6 +16,8 @@ const GRAPH_TOOL_NAMES = new Set<string>([
   "graph_approvals",
   "graph_flows",
   "graph_powerbi",
+  // curp_downloader uses Graph only for email/onedrive delivery — participates in the auth flow
+  "curp_downloader",
 ]);
 
 const AUTH_ACTIONS = new Set<string>(["auth-login", "auth-poll"]);

@@ -59,3 +59,7 @@ approved_tools:
     version: 0.1.0
     owner: equipo-agentec
     status: approved
+  - name: curp-downloader
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved

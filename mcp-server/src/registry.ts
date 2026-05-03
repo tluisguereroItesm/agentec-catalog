@@ -36,6 +36,7 @@ const HANDLER_MAP: Record<string, string> = {
   "graph-flows": "./tools/graph-flows",
   "graph-powerbi": "./tools/graph-powerbi",
   "cleanup": "./tools/cleanup",
+  "curp-downloader": "./tools/curp-downloader",
 };
 
 // Converts kebab-case catalog name to MCP snake_case tool name
