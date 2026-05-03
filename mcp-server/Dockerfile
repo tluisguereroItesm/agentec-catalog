@@ -36,7 +36,7 @@ RUN npx tsc
 
 
 # ─── Stage 4: Runtime with Playwright / Chromium ─────────────────────────────
-FROM mcr.microsoft.com/playwright:v1.58.0-noble AS runtime
+FROM mcr.microsoft.com/playwright:v1.59.1-noble AS runtime
 
 WORKDIR /app
 
