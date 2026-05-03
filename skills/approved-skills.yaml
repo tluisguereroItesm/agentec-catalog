@@ -80,3 +80,8 @@ approved_skills:
     owner: equipo-agentec
     status: approved
     skillFile: skills/cleanup/SKILL.md
+  - name: documentos-oficiales-mx
+    version: 0.1.0
+    owner: equipo-agentec
+    status: approved
+    skillFile: skills/documentos-oficiales-mx/SKILL.md
