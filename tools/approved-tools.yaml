@@ -2,11 +2,11 @@ approved_tools:
   - name: web-login-playwright
     version: 0.1.0
     owner: equipo-agentec
-    status: disabled
+    status: approved
   - name: web-login-playwright-py
     version: 0.1.0
     owner: equipo-agentec
-    status: disabled
+    status: approved
   - name: graph-mail
     version: 0.1.0
     owner: equipo-agentec

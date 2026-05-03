@@ -142,15 +142,30 @@ async function main() {
     );
   }
 
-  // Singleton MCP server — created once, not per request (prevents DoS via object allocation)
-  const mcpServer = createMcpServer(tools);
-  const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
-  await mcpServer.connect(transport);
+  // Per-request server factory — SDK 1.x StreamableHTTPServerTransport in stateless mode
+  // can only serve one MCP session per instance; a singleton transport returns HTTP 500 on
+  // every request after the first initialize because the internal session is already consumed.
+  // Creating a new Server + Transport per request is cheap (handlers are closures over `tools`).
+  function createRequestHandler(): { server: Server; transport: StreamableHTTPServerTransport } {
+    const server = createMcpServer(tools);
+    const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+    transport.onerror = (error) => {
+      console.error("[agentec-mcp-server] transport error:", error);
+    };
+    return { server, transport };
+  }
 
   const httpServer = http.createServer((req, res) => {
     const url = req.url ? new URL(req.url, "http://localhost") : null;
     if (url?.pathname === "/mcp" || url?.pathname === "/mcp/") {
+      const remoteIp = req.socket?.remoteAddress ?? "?";
+      console.log(
+        `[mcp-req] ${req.method} /mcp from=${remoteIp} ` +
+        `accept=${req.headers.accept ?? "none"} ct=${req.headers["content-type"] ?? "none"} ` +
+        `auth=${req.headers.authorization ? "present" : "MISSING"}`
+      );
       if (!isAuthorizedRequest(req)) {
+        console.log(`[mcp-req] REJECTED 401 from=${remoteIp}`);
         res.writeHead(401, { "Content-Type": "application/json" });
         res.end(
           JSON.stringify({
@@ -165,7 +180,17 @@ async function main() {
         return;
       }
 
-      // Enforce request body size limit (1 MB) to prevent memory exhaustion
+      // Hono reads rawHeaders (not headers) to build the Web Request.
+      // Inject Accept if missing so the SDK's 406 check is satisfied.
+      const acceptHeader =
+        typeof req.headers.accept === "string" ? req.headers.accept.toLowerCase() : "";
+      const hasJson = acceptHeader.includes("application/json");
+      const hasEventStream = acceptHeader.includes("text/event-stream");
+      if (!hasJson || !hasEventStream) {
+        req.headers.accept = "application/json, text/event-stream";
+        req.rawHeaders.push("Accept", "application/json, text/event-stream");
+      }
+
       const MAX_BODY = 1 * 1024 * 1024;
       let body = "";
       let bodySize = 0;
@@ -179,13 +204,38 @@ async function main() {
         }
         body += chunk.toString();
       });
-      req.on("end", async () => {
+
+      req.on("end", () => {
         if (res.writableEnded) return;
-        try {
-          const parsedBody = body ? JSON.parse(body) : undefined;
-          const patchedBody = injectGraphUserOnBody(req, parsedBody);
-          await transport.handleRequest(req, res, patchedBody);
-        } catch (err) {
+
+        let parsedBody: unknown;
+        if (body.trim().length > 0) {
+          try {
+            parsedBody = JSON.parse(body);
+          } catch {
+            if (!res.headersSent) {
+              res.writeHead(400, { "Content-Type": "application/json" });
+              res.end(
+                JSON.stringify({
+                  jsonrpc: "2.0",
+                  error: {
+                    code: -32700,
+                    message: "Parse error: Invalid JSON",
+                  },
+                  id: null,
+                })
+              );
+            }
+            return;
+          }
+        }
+
+        const patchedBody = injectGraphUserOnBody(req, parsedBody);
+
+        const { server: mcpServer, transport } = createRequestHandler();
+        mcpServer.connect(transport).then(() => {
+          return transport.handleRequest(req, res, patchedBody);
+        }).catch((err) => {
           const message = err instanceof Error ? err.message : String(err);
           console.error("[agentec-mcp-server] /mcp request failed:", message);
 
@@ -202,7 +252,7 @@ async function main() {
               })
             );
           }
-        }
+        });
       });
     } else if (url?.pathname === "/health") {
       // Public liveness probe — does NOT expose tool list (information disclosure prevention)
