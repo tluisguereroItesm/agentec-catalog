@@ -36,7 +36,7 @@ RUN npx tsc
 
 
 # ─── Stage 4: Runtime with Playwright / Chromium ─────────────────────────────
-FROM mcr.microsoft.com/playwright:v1.58.0-noble AS runtime
+FROM mcr.microsoft.com/playwright:v1.59.1-noble AS runtime
 
 WORKDIR /app
 
@@ -44,7 +44,7 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends python3 python3-pip \
   && rm -rf /var/lib/apt/lists/* \
   && python3 -m pip install --break-system-packages --no-cache-dir \
-       playwright pypdf pdfplumber python-docx openpyxl
+       "playwright==1.59.0" pypdf pdfplumber python-docx openpyxl
 
 # Compiled MCP server
 COPY --from=builder   /build/dist/        ./dist/
